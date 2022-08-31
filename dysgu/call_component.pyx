@@ -118,7 +118,7 @@ cdef count_attributes2(reads1, reads2, spanning, int extended_tags, float insert
 
     for index, a in enumerate(itertools.chain(reads1, reads2, [i.read_a for i in generic_ins])):
         if not flag & 2304:
-            read_names.add(a.qname)
+            read_names.add(a.qname.replace(":","_COLON_"))
         if extended_tags:
             if a.has_tag("ZP"):
                 DP += float(a.get_tag("ZP"))
@@ -196,7 +196,7 @@ cdef count_attributes2(reads1, reads2, spanning, int extended_tags, float insert
 
     for a in spanning:
         if not flag & 2304:
-            read_names.add(a.qname)
+            read_names.add(a.qname.replace(":","_COLON_"))
         if extended_tags:
             if a.has_tag("ZP"):
                 DP += float(a.get_tag("ZP"))
