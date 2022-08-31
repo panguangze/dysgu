@@ -821,7 +821,6 @@ cdef single(rds, int insert_size, int insert_stdev, float insert_ppf, int clip_l
     for cigar_info, align in rds:
 
         tmp[align.qname].append((cigar_info, align))
-        logging.info(align.qname+",xxxxxxx")
         if align.flag & 1 and abs(align.tlen) < insert_ppf:
             small_tlen_outliers += 1
 
@@ -1660,7 +1659,6 @@ cdef one_edge(u_reads_info, v_reads_info, int clip_length, int insert_size, int 
     cdef int cigar_index, event_pos
 
     for cigar_info, a in u_reads_info:
-        logging.info(a.qname+",one_edge")
         if not a.cigartuples:
             continue
         u_reads.append(a)
@@ -1677,7 +1675,6 @@ cdef one_edge(u_reads_info, v_reads_info, int clip_length, int insert_size, int 
                                         cigar_index))
 
     for cigar_info, a in v_reads_info:
-        logging.info(a.qname+",one_edge")
         if not a.cigartuples:
             continue
         v_reads.append(a)

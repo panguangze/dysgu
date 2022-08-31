@@ -247,6 +247,7 @@ def vcf_to_df(path):
                "event_id": ("event_id", np.int64),
                "KIND": ("kind", str),
                "SVTYPE": ("svtype", str),
+               "READNAMES": ("read_names",str),
                "CT": ("join_type", str),
                "CIPOS95": ("cipos95A", np.int64),
                "CIEND95": ("cipos95B", np.int64),
