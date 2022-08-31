@@ -324,7 +324,10 @@ def vcf_to_df(path):
         if k in df:
             if df[k].dtype != dtype:
                 if dtype == str:
-                    df[k] = df[k].fillna("")
+                    if k == "GT":
+                        df[k] = df[k].fillna("0/0")
+                    else:
+                        df[k] = df[k].fillna("")
                 else:
                     df[k] = df[k].fillna(0)
                 try:
