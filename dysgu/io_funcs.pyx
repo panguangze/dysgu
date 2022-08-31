@@ -375,9 +375,9 @@ def gen_format_fields(r, df, names, extended, n_fields, small_output):
             row = cols[name]
             format_fields[name] = get_fmt(row, extended, small_output)
         else:
-            format_fields[name] = [0] * n_fields
-    if format_fields[name] = [0] * n_fields:
-        format_fields[name] = "0/0"+format_fields[name]
+            format_fields[name] = ['0'] * n_fields
+    if format_fields[name][0] == '0':
+        format_fields[name].insert(0,"0/0")
     return format_fields, cols
 
 
