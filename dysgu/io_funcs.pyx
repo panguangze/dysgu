@@ -131,13 +131,13 @@ def get_include_reads(include_regions, bam):
 cpdef list col_names(extended, small_output):  # todo fix for no-contigs view command
 
     if small_output:
-        return ["chrA", "posA", "chrB", "posB", "sample", "event_id", "grp_id", "n_in_grp", "kind", "type", "svtype", "join_type", "cipos95A", "cipos95B", 'contigA', 'contigB', "svlen", "svlen_precise", "rep", "gc",
+        return ["chrA", "posA", "chrB", "posB", "sample", "event_id", "grp_id", "n_in_grp", "kind", "type", "svtype", "read_names", "join_type", "cipos95A", "cipos95B", 'contigA', 'contigB', "svlen", "svlen_precise", "rep", "gc",
           ["GT", "GQ", "MAPQpri", "su", "spanning", "pe", "supp", "sc", "bnd",
          "raw_reads_10kb", "neigh10kb", "plus",
                 "minus", "remap_score", "remap_ed", "bad_clip_count", "fcc", "inner_cn", "outer_cn", "prob"]
             ]
     if extended:  # to do fix this
-        return ["chrA", "posA", "chrB", "posB", "sample", "event_id", "grp_id", "n_in_grp",  "kind", "type", "svtype", "join_type", "cipos95A", "cipos95B", 'contigA', 'contigB', "svlen", "svlen_precise",  "rep", "gc",
+        return ["chrA", "posA", "chrB", "posB", "sample", "event_id", "grp_id", "n_in_grp",  "kind", "type", "svtype", "read_names", "join_type", "cipos95A", "cipos95B", 'contigA', 'contigB', "svlen", "svlen_precise",  "rep", "gc",
          ["GT", "GQ", "DP", "DN", "DApri", "DAsupp",  "NMpri", "NMsupp", "NMbase", "MAPQpri", "MAPQsupp", "NP",
           "maxASsupp",  "su", "spanning", "pe", "supp", "sc", "bnd", "sqc", "scw", "clip_qual_ratio", "block_edge",
          "raw_reads_10kb", "mcov",
@@ -146,7 +146,7 @@ cpdef list col_names(extended, small_output):  # todo fix for no-contigs view co
                 "inner_cn", "outer_cn", "compress", "ref_rep", "prob"]
             ]
     else:
-        return ["chrA", "posA", "chrB", "posB", "sample", "event_id", "grp_id", "n_in_grp", "kind", "type", "svtype", "join_type", "cipos95A", "cipos95B", 'contigA', 'contigB', "svlen", "svlen_precise",  "rep", "gc",
+        return ["chrA", "posA", "chrB", "posB", "sample", "event_id", "grp_id", "n_in_grp", "kind", "type", "svtype", "read_names", "join_type", "cipos95A", "cipos95B", 'contigA', 'contigB', "svlen", "svlen_precise",  "rep", "gc",
           ["GT", "GQ", "NMpri", "NMsupp", "NMbase", "MAPQpri", "MAPQsupp", "NP",
           "maxASsupp",  "su", "spanning", "pe", "supp", "sc", "bnd", "sqc", "scw", "clip_qual_ratio", "block_edge",
          "raw_reads_10kb", "mcov",
@@ -300,6 +300,7 @@ def make_main_record(r, version, index, format_f, df_rows, add_kind, extended, s
            # INFO line
            ";".join([f"SVMETHOD=DYSGUv{version}",
                    f"SVTYPE={r['svtype']}",
+                   f"READNAMES={r['read_names']}",
                    f"END={r['posB']}" if r['chrA'] == r['chrB'] else f"END={r['posA'] + 1}",
                    f"CHR2={r['chrB']}" + chr2_pos,
                    f"GRP={r['grp_id']}",
@@ -387,6 +388,7 @@ def get_headers(extended_tags):
 ##source=DYSGU
 ##FILTER=<ID=lowProb,Description="Probability below threshold set with --thresholds">
 ##INFO=<ID=SVTYPE,Number=1,Type=String,Description="Type of structural variant">
+##INFO=<ID=READNAMES,Number=1,Type=String,Description="SV support read names">
 ##INFO=<ID=SVLEN,Number=1,Type=Integer,Description="Difference in length between REF and ALT alleles">
 ##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the variant described in this record">
 ##INFO=<ID=CHR2,Number=1,Type=String,Description="Chromosome for END coordinate in case of a translocation">
@@ -482,6 +484,7 @@ def get_headers(extended_tags):
 ##source=DYSGU
 ##FILTER=<ID=lowProb,Description="Probability below threshold set with --thresholds">
 ##INFO=<ID=SVTYPE,Number=1,Type=String,Description="Type of structural variant">
+##INFO=<ID=READNAMES,Number=1,Type=String,Description="SV support read names">
 ##INFO=<ID=SVLEN,Number=1,Type=Integer,Description="Difference in length between REF and ALT alleles">
 ##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the variant described in this record">
 ##INFO=<ID=CHR2,Number=1,Type=String,Description="Chromosome for END coordinate in case of a translocation">

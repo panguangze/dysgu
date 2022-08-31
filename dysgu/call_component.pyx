@@ -105,6 +105,7 @@ cdef count_attributes2(reads1, reads2, spanning, int extended_tags, float insert
     cdef int abq, ab, cbq, cb
     paired_end = set([])
     seen = set([])
+    read_names = set([])
 
     er.spanning = len(spanning)
     er.bnd = len(generic_ins)
@@ -116,7 +117,8 @@ cdef count_attributes2(reads1, reads2, spanning, int extended_tags, float insert
     cdef AlignedSegment a
 
     for index, a in enumerate(itertools.chain(reads1, reads2, [i.read_a for i in generic_ins])):
-
+        if not flag & 2304:
+            read_names.add(a.qname)
         if extended_tags:
             if a.has_tag("ZP"):
                 DP += float(a.get_tag("ZP"))
@@ -193,7 +195,8 @@ cdef count_attributes2(reads1, reads2, spanning, int extended_tags, float insert
             clipped_bases += cb
 
     for a in spanning:
-
+        if not flag & 2304:
+            read_names.add(a.qname)
         if extended_tags:
             if a.has_tag("ZP"):
                 DP += float(a.get_tag("ZP"))
@@ -281,12 +284,12 @@ cdef count_attributes2(reads1, reads2, spanning, int extended_tags, float insert
     if len(reads2) == 0:
         er.pe = len(reads1)
     er.su = er.pe + er.supp + (2*er.spanning) + er.bnd
-
+    
     if clipped_bases > 0 and aligned_bases > 0 and clipped_base_quals > 0:
         er.clip_qual_ratio = (aligned_base_quals / aligned_bases) / (clipped_base_quals / clipped_bases)
     else:
         er.clip_qual_ratio = 0
-
+    er.read_names = ",".join(read_names)
 
 cdef int within_read_end_position(event_pos, svtype, cigartuples, cigar_index):
     cdef int i, end, idx, opp, length, cigar_skip, n_aligned_bases, target_bases
@@ -814,11 +817,11 @@ cdef single(rds, int insert_size, int insert_stdev, float insert_ppf, int clip_l
     generic_insertions = []
     tmp = defaultdict(list)  # group by template name
     small_tlen_outliers = 0  # for paired reads note any smaller than expected TLENs
-
+    logging.info(rds)
     for cigar_info, align in rds:
 
         tmp[align.qname].append((cigar_info, align))
-
+        logging.info(align.qname+",xxxxxxx")
         if align.flag & 1 and abs(align.tlen) < insert_ppf:
             small_tlen_outliers += 1
 
@@ -1657,6 +1660,7 @@ cdef one_edge(u_reads_info, v_reads_info, int clip_length, int insert_size, int 
     cdef int cigar_index, event_pos
 
     for cigar_info, a in u_reads_info:
+        logging.info(a.qname+",one_edge")
         if not a.cigartuples:
             continue
         u_reads.append(a)
@@ -1673,6 +1677,7 @@ cdef one_edge(u_reads_info, v_reads_info, int clip_length, int insert_size, int 
                                         cigar_index))
 
     for cigar_info, a in v_reads_info:
+        logging.info(a.qname+",one_edge")
         if not a.cigartuples:
             continue
         v_reads.append(a)
