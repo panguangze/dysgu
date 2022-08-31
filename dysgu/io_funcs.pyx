@@ -474,7 +474,7 @@ def get_headers(extended_tags):
 ##FORMAT=<ID=RR,Number=1,Type=Float,Description="Repeat score for reference">
 ##FORMAT=<ID=JIT,Number=1,Type=Float,Description="SV length jitter">
 ##FORMAT=<ID=PROB,Number=1,Type=Float,Description="Probability of event being true">
-##FORMAT=<ID=READNAMES,Number=.,Type=String,Description="SV support read names">{}
+##FORMAT=<ID=READNAMES,Number=G,Type=String,Description="SV support read names">{}
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT"""
 
     else:
@@ -566,7 +566,7 @@ def get_headers(extended_tags):
 ##FORMAT=<ID=RR,Number=1,Type=Float,Description="Repeat score for reference">
 ##FORMAT=<ID=JIT,Number=1,Type=Float,Description="SV length jitter">
 ##FORMAT=<ID=PROB,Number=1,Type=Float,Description="Probability of event being true">
-##FORMAT=<ID=READNAMES,Number=.,Type=String,Description="SV support read names">{}
+##FORMAT=<ID=READNAMES,Number=G,Type=String,Description="SV support read names">{}
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT"""
 
     return HEADER
