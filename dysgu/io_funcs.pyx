@@ -273,11 +273,11 @@ def make_main_record(r, version, index, format_f, df_rows, add_kind, extended, s
         info_extras += [f"MeanPROB={round(mean_prob, 3)}", f"MaxPROB={round(max_prob, 3)}"]
 
     if small_output:
-        fmt_keys = "GT:GQ:MAPQP:SU:WR:PE:SR:SC:BND:COV:NEIGH10:PS:MS:RMS:RED:BCC:FCC:ICN:OCN:PROB"
+        fmt_keys = "GT:GQ:MAPQP:SU:WR:PE:SR:SC:BND:COV:NEIGH10:PS:MS:RMS:RED:BCC:FCC:ICN:OCN:PROB:READNAMES"
     elif extended:
-        fmt_keys = "GT:GQ:DP:DN:DAP:DAS:NMP:NMS:NMB:MAPQP:MAPQS:NP:MAS:SU:WR:PE:SR:SC:BND:SQC:SCW:SQR:BE:COV:MCOV:LNK:NEIGH:NEIGH10:RB:PS:MS:SBT:NG:NSA:NXA:NMU:NDC:RMS:RED:BCC:FCC:STL:RAS:FAS:ICN:OCN:CMP:RR:JIT:PROB"
+        fmt_keys = "GT:GQ:DP:DN:DAP:DAS:NMP:NMS:NMB:MAPQP:MAPQS:NP:MAS:SU:WR:PE:SR:SC:BND:SQC:SCW:SQR:BE:COV:MCOV:LNK:NEIGH:NEIGH10:RB:PS:MS:SBT:NG:NSA:NXA:NMU:NDC:RMS:RED:BCC:FCC:STL:RAS:FAS:ICN:OCN:CMP:RR:JIT:PROB:READNAMES"
     else:
-        fmt_keys = "GT:GQ:NMP:NMS:NMB:MAPQP:MAPQS:NP:MAS:SU:WR:PE:SR:SC:BND:SQC:SCW:SQR:BE:COV:MCOV:LNK:NEIGH:NEIGH10:RB:PS:MS:SBT:NG:NSA:NXA:NMU:NDC:RMS:RED:BCC:FCC:STL:RAS:FAS:ICN:OCN:CMP:RR:JIT:PROB"
+        fmt_keys = "GT:GQ:NMP:NMS:NMB:MAPQP:MAPQS:NP:MAS:SU:WR:PE:SR:SC:BND:SQC:SCW:SQR:BE:COV:MCOV:LNK:NEIGH:NEIGH10:RB:PS:MS:SBT:NG:NSA:NXA:NMU:NDC:RMS:RED:BCC:FCC:STL:RAS:FAS:ICN:OCN:CMP:RR:JIT:PROB:READNAMES"
 
     if "variant_seq" in r and isinstance(r["variant_seq"], str):
         if r['svtype'] == "INS":
@@ -300,7 +300,6 @@ def make_main_record(r, version, index, format_f, df_rows, add_kind, extended, s
            # INFO line
            ";".join([f"SVMETHOD=DYSGUv{version}",
                    f"SVTYPE={r['svtype']}",
-                   f"READNAMES={r['read_names']}",
                    f"END={r['posB']}" if r['chrA'] == r['chrB'] else f"END={r['posA'] + 1}",
                    f"CHR2={r['chrB']}" + chr2_pos,
                    f"GRP={r['grp_id']}",
@@ -315,7 +314,6 @@ def make_main_record(r, version, index, format_f, df_rows, add_kind, extended, s
     # FORMAT line(s)
     for item in format_f.values():
         rec.append(":".join(map(str, item)))
-
     return rec
 
 
@@ -323,7 +321,7 @@ def get_fmt(r, extended, small_output):
     if small_output:
         v = [r["GT"], r["GQ"], r['MAPQpri'], r['su'], r['spanning'], r['pe'], r['supp'], r['sc'], r['bnd'],
              r['raw_reads_10kb'], r['neigh10kb'], r["plus"], r["minus"], r["remap_score"], r["remap_ed"],
-             r["bad_clip_count"], round(r["fcc"], 3), round(r["inner_cn"], 3), round(r["outer_cn"], 3), r['prob']
+             r["bad_clip_count"], round(r["fcc"], 3), round(r["inner_cn"], 3), round(r["outer_cn"], 3), r['prob'], r['read_names']
              ]
         return v
 
@@ -336,7 +334,7 @@ def get_fmt(r, extended, small_output):
              round(r["n_xa"], 2),
              round(r["n_unmapped_mates"], 2), r["double_clips"], r["remap_score"], r["remap_ed"], r["bad_clip_count"],
              round(r["fcc"], 3), r["n_small_tlen"], r["ras"], r['fas'],
-             round(r["inner_cn"], 3), round(r["outer_cn"], 3), round(r["compress"], 2), round(r["ref_rep"], 3), round(r["jitter"], 3), r['prob']
+             round(r["inner_cn"], 3), round(r["outer_cn"], 3), round(r["compress"], 2), round(r["ref_rep"], 3), round(r["jitter"], 3), r['prob'], r['read_names']
              ]
         return v
 
@@ -346,7 +344,7 @@ def get_fmt(r, extended, small_output):
              r['sc'], r['bnd'], round(r['sqc'], 2), round(r['scw'], 1), round(r['clip_qual_ratio'], 3), r['block_edge'], r['raw_reads_10kb'], round(r['mcov'], 2), int(r['linked']), r['neigh'], r['neigh10kb'],
              r['ref_bases'], r["plus"], r["minus"], round(r["strand_binom_t"], 4), r['n_gaps'], round(r["n_sa"], 2),
              round(r["n_xa"], 2), round(r["n_unmapped_mates"], 2), r["double_clips"], r["remap_score"], r["remap_ed"], r["bad_clip_count"], round(r["fcc"], 3), r["n_small_tlen"], r["ras"], r['fas'],
-             round(r["inner_cn"], 3), round(r["outer_cn"], 3), round(r["compress"], 2), round(r["ref_rep"], 3), round(r["jitter"], 3), r['prob']
+             round(r["inner_cn"], 3), round(r["outer_cn"], 3), round(r["compress"], 2), round(r["ref_rep"], 3), round(r["jitter"], 3), r['prob'], r['read_names']
              ]
         return v
 
@@ -388,7 +386,6 @@ def get_headers(extended_tags):
 ##source=DYSGU
 ##FILTER=<ID=lowProb,Description="Probability below threshold set with --thresholds">
 ##INFO=<ID=SVTYPE,Number=1,Type=String,Description="Type of structural variant">
-##INFO=<ID=READNAMES,Number=1,Type=String,Description="SV support read names">
 ##INFO=<ID=SVLEN,Number=1,Type=Integer,Description="Difference in length between REF and ALT alleles">
 ##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the variant described in this record">
 ##INFO=<ID=CHR2,Number=1,Type=String,Description="Chromosome for END coordinate in case of a translocation">
@@ -476,7 +473,8 @@ def get_headers(extended_tags):
 ##FORMAT=<ID=CMP,Number=1,Type=Float,Description="Compression ratio of contigs">
 ##FORMAT=<ID=RR,Number=1,Type=Float,Description="Repeat score for reference">
 ##FORMAT=<ID=JIT,Number=1,Type=Float,Description="SV length jitter">
-##FORMAT=<ID=PROB,Number=1,Type=Float,Description="Probability of event being true">{}
+##FORMAT=<ID=PROB,Number=1,Type=Float,Description="Probability of event being true">
+##FORMAT=<ID=READNAMES,Number=.,Type=String,Description="SV support read names">{}
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT"""
 
     else:
@@ -484,7 +482,6 @@ def get_headers(extended_tags):
 ##source=DYSGU
 ##FILTER=<ID=lowProb,Description="Probability below threshold set with --thresholds">
 ##INFO=<ID=SVTYPE,Number=1,Type=String,Description="Type of structural variant">
-##INFO=<ID=READNAMES,Number=1,Type=String,Description="SV support read names">
 ##INFO=<ID=SVLEN,Number=1,Type=Integer,Description="Difference in length between REF and ALT alleles">
 ##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the variant described in this record">
 ##INFO=<ID=CHR2,Number=1,Type=String,Description="Chromosome for END coordinate in case of a translocation">
@@ -568,7 +565,8 @@ def get_headers(extended_tags):
 ##FORMAT=<ID=CMP,Number=1,Type=Float,Description="Compression ratio of contigs">
 ##FORMAT=<ID=RR,Number=1,Type=Float,Description="Repeat score for reference">
 ##FORMAT=<ID=JIT,Number=1,Type=Float,Description="SV length jitter">
-##FORMAT=<ID=PROB,Number=1,Type=Float,Description="Probability of event being true">{}
+##FORMAT=<ID=PROB,Number=1,Type=Float,Description="Probability of event being true">
+##FORMAT=<ID=READNAMES,Number=.,Type=String,Description="SV support read names">{}
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT"""
 
     return HEADER
@@ -633,7 +631,6 @@ def to_vcf(df, args, names, outfile, show_names=True,  contig_names="", extended
 
         recs.append(r_main)
         count += 1
-
     if sort_output:
         for rec in sorted(recs, key=lambda x: (x[0], x[1])):
             outfile.write("\t".join(list(map(str, rec))) + "\n")
