@@ -314,8 +314,9 @@ def make_main_record(r, version, index, format_f, df_rows, add_kind, extended, s
     # FORMAT line(s)
     for item in format_f.values():
         if item[0] == '0':
-            rec.append("0/0")
-        rec.append(":".join(map(str, item)))
+            rec.append("0/0"+":".join(map(str, item)))
+        else:
+            rec.append(":".join(map(str, item)))
     return rec
 
 
