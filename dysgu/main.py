@@ -472,6 +472,8 @@ def call_events(ctx, **kwargs):
               type=click.Choice(["True", "False"]), show_default=True)
 @click.option("--add-kind", help="Add region-overlap 'kind' to vcf output", default="False",
               type=click.Choice(["True", "False"]), show_default=True)
+@click.option("--trio", help="If merge trio", default="True",
+              type=click.Choice(["True", "False"]), show_default=True)
 @click.option('-v', '--verbosity', help="0 = no contigs in output, 1 = output contigs for variants without ALT sequence called, 2 = output all contigs",
               default='1', type=click.Choice(['0', '1', '2']), show_default=True)
 #@click.option("-x", "--overwrite", help="Overwrite temp files", is_flag=True, flag_value=True, show_default=False, default=False)

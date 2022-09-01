@@ -155,8 +155,18 @@ cpdef list col_names(extended, small_output):  # todo fix for no-contigs view co
                 "inner_cn", "outer_cn", "compress", "ref_rep", "prob"]
             ]
 
+def keep_trio(r1,r2,r3,chr1,chr2):
+    r1_su = r1[3]
+    r2_su = r2[3]
+    r3_su = r3[3]
 
-def make_main_record(r, version, index, format_f, df_rows, add_kind, extended, small_output):
+    if int(r1_su) < 10 and int(r2_su) < 10 and int(r2_su) < 10:
+        return False
+    else:
+        return True 
+
+
+def make_main_record(r, version, index, format_f, df_rows, add_kind, extended, small_output,is_merge):
 
     rep, repsc, lenprec = 0, 0, 1
     mean_prob, max_prob = None, None
@@ -312,11 +322,17 @@ def make_main_record(r, version, index, format_f, df_rows, add_kind, extended, s
            fmt_keys  # :PROB
            ]
     # FORMAT line(s)
-    for item in format_f.values():
+    f_f_vs = format_f.values()
+    for item in f_f_vs:
         if item[0] == '0':
             rec.append("0/0:"+":".join(map(str, item)))
         else:
             rec.append(":".join(map(str, item)))
+    if is_merge:
+        if not keep_trio(f_f_vs[0],f_f_vs[1],f_f_vs[2]):
+            return None
+        if r["chrA"] != r["chrB"]:
+            return None
     return rec
 
 
@@ -631,9 +647,9 @@ def to_vcf(df, args, names, outfile, show_names=True,  contig_names="", extended
         if "partners" in r and r["partners"] is not None and r["partners"] != ".":
             seen_idx |= set(r["partners"])
 
-        r_main = make_main_record(r, version, count, format_f, df_rows, add_kind, extended_tags, small_output_f)
-
-        recs.append(r_main)
+        r_main = make_main_record(r, version, count, format_f, df_rows, add_kind, extended_tags, small_output_f,args['trio'])
+        if not r_main == None:
+            recs.append(r_main)
         count += 1
     if sort_output:
         for rec in sorted(recs, key=lambda x: (x[0], x[1])):
