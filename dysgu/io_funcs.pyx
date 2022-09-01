@@ -155,7 +155,7 @@ cpdef list col_names(extended, small_output):  # todo fix for no-contigs view co
                 "inner_cn", "outer_cn", "compress", "ref_rep", "prob"]
             ]
 
-def keep_trio(r1,r2,r3,chr1,chr2):
+def keep_trio(r1,r2,r3):
     r1_su = r1[3]
     r2_su = r2[3]
     r3_su = r3[3]
@@ -647,7 +647,7 @@ def to_vcf(df, args, names, outfile, show_names=True,  contig_names="", extended
         if "partners" in r and r["partners"] is not None and r["partners"] != ".":
             seen_idx |= set(r["partners"])
 
-        r_main = make_main_record(r, version, count, format_f, df_rows, add_kind, extended_tags, small_output_f,args['trio'])
+        r_main = make_main_record(r, version, count, format_f, df_rows, add_kind, extended_tags, small_output_f,args['trio'] == "True")
         if not r_main == None:
             recs.append(r_main)
         count += 1
