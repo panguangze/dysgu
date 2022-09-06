@@ -1373,7 +1373,8 @@ def cluster_reads(args):
                 contig_header_lines += f"\n##contig=<ID={item['SN']},length={item['LN']}>"
             args["add_kind"] = "True"
             args["sample_name"] = sample_name
-
+            # trio
+            args['trio'] = False
             io_funcs.to_vcf(df, args, {sample_name}, outfile, show_names=False, contig_names=contig_header_lines,
                             extended_tags=extended_tags, sort_output=False)
 
