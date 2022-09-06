@@ -817,7 +817,6 @@ cdef single(rds, int insert_size, int insert_stdev, float insert_ppf, int clip_l
     generic_insertions = []
     tmp = defaultdict(list)  # group by template name
     small_tlen_outliers = 0  # for paired reads note any smaller than expected TLENs
-    logging.info(rds)
     for cigar_info, align in rds:
 
         tmp[align.qname].append((cigar_info, align))
