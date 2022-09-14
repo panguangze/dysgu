@@ -156,14 +156,18 @@ cpdef list col_names(extended, small_output):  # todo fix for no-contigs view co
             ]
 
 def keep_trio(r1,r2,r3):
-    r1_su = r1[3]
-    r2_su = r2[3]
-    r3_su = r3[3]
-
-    if int(r1_su) < 10 and int(r2_su) < 10 and int(r2_su) < 10:
-        return False
+    r1_su = int(r1[3])
+    r2_su = int(r2[3])
+    r3_su = int(r3[3])
+    r_list = [r1_su,r2_su,r3_su]
+    if r_list.count(0) == 0 and sum(r_list) >= 30:
+        return True
+    if r_list.count(0) == 1 and sum(r_list) >= 20:
+        return True
+    if r_list.count(0) == 2 and sum(r_list) >= 10:
+        return True
     else:
-        return True 
+        return False 
 
 
 def make_main_record(r, version, index, format_f, df_rows, add_kind, extended, small_output,is_merge):
