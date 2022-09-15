@@ -167,7 +167,7 @@ def keep_trio(r1,r2,r3):
     if r_list.count(0) == 2 and sum(r_list) >= 10:
         return True
     else:
-        return False 
+        return False
 
 
 def make_main_record(r, version, index, format_f, df_rows, add_kind, extended, small_output,is_merge):
