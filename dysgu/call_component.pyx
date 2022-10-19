@@ -185,6 +185,8 @@ cdef count_attributes2(reads1, reads2, spanning, int extended_tags, float insert
 
         ct = a.cigartuples
         if ct[0][0] == 4 or ct[-1][0] == 4:
+            if not flag & 2304:
+                read_names.add(a.qname.replace(":","_COLON_"))
             er.sc += 1
 
         if a.flag & 1:  # paired read
